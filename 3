@@ -1,0 +1,93 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define SIZE 3
+
+struct BOOK {
+    int ISBN;
+    char title[40];
+    char author[20];
+    float price;
+};
+
+struct stack {
+    struct BOOK b[SIZE];
+    int top;
+};
+
+void push(struct stack *PS, struct BOOK b1);
+struct BOOK POP(struct stack *PS);
+void display(struct stack *PS);
+
+int main() {
+    struct stack s;
+    struct BOOK b1, r1;
+    int choice;
+
+    s.top = -1;
+
+    do {
+        printf("\n1 is push, 2 is pop, 3 is display, 4 is exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter the ISBN, author, title, price: ");
+                scanf("%d %s %s %f", &b1.ISBN, b1.author, b1.title, &b1.price);
+                push(&s, b1);
+                break;
+            case 2:
+                r1 = POP(&s);
+                printf("The details of the book are:\n");
+                printf("ISBN=%d, Author=%s, Title=%s, Price=%.2f\n", r1.ISBN, r1.author, r1.title, r1.price);
+                break;
+            case 3:
+                display(&s);
+                break;
+            case 4:
+                printf("Quitting operation\n");
+                break;
+            default:
+                printf("Invalid choice\n");
+        }
+    } while (choice != 4);
+
+    return 0;
+}
+
+void push(struct stack *PS, struct BOOK b1) {
+    if (PS->top == SIZE - 1)
+        printf("Stack overflow\n");
+    else {
+        (PS->top)++;
+        PS->b[PS->top] = b1;
+    }
+}
+
+struct BOOK POP(struct stack *PS) {
+    struct BOOK r;
+    if (PS->top == -1) {
+        printf("Stack underflow\n");
+        r.ISBN = -1; // Return a dummy ISBN indicating failure
+        return r;
+    }
+    else {
+        r = PS->b[PS->top];
+        (PS->top)--;
+        return r;
+    }
+}
+
+void display(struct stack *PS) {
+    int i;
+    if (PS->top == -1)
+        printf("Stack is empty\n");
+    else {
+        printf("Stack elements are:\n");
+        for (i = 0; i <= PS->top; i++) {
+            printf("ISBN=%d, Author=%s, Title=%s, Price=%.2f\n", PS->b[i].ISBN, PS->b[i].author, PS->b[i].title, PS->b[i].price);
+        }
+    }
+}
